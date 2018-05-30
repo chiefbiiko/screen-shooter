@@ -1,0 +1,31 @@
+{
+  "name": "ads-urls",
+  "version": "0.0.0",
+  "description": "get urls for ads from google",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiefbiiko/ads-urls.git"
+  },
+  "keywords": [
+    "ads",
+    "urls",
+    "google",
+    "automation"
+  ],
+  "author": "Noah Anabiik Schwarz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chiefbiiko/ads-urls/issues"
+  },
+  "homepage": "https://github.com/chiefbiiko/ads-urls#readme",
+  "dependencies": {
+    "aka-opts": "0.0.3",
+    "async": "^2.6.1",
+    "debug": "^3.1.0",
+    "puppeteer": "^1.4.0"
+  }
+}

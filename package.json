@@ -1,0 +1,33 @@
+{
+  "name": "screen-shooter",
+  "version": "0.0.0",
+  "description": "take screenshots with puppeteer",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiefbiiko/screen-shooter.git"
+  },
+  "keywords": [
+    "screen",
+    "shooter",
+    "puppeteer"
+  ],
+  "author": "Noah Anabiik Schwarz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chiefbiiko/screen-shooter/issues"
+  },
+  "homepage": "https://github.com/chiefbiiko/screen-shooter#readme",
+  "devDependencies": {
+    "debug": "^3.1.0",
+    "del": "^3.0.0",
+    "tape": "^4.9.0"
+  },
+  "dependencies": {
+    "async": "^2.6.1",
+    "puppeteer": "^1.4.0"
+  }
+}

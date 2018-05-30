@@ -1,0 +1,19 @@
+{
+  "name": "auto-buster",
+  "version": "0.0.0",
+  "description": "personal utility",
+  "main": "dashboard.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Noah Anabiik Schwarz",
+  "license": "MIT",
+  "dependencies": {
+    "ads-urls": "git+https://github.com/chiefbiiko/ads-urls.git",
+    "ansi-diff-stream": "^1.2.1",
+    "neat-input": "^1.7.0"
+  },
+  "devDependencies": {
+    "debug": "^3.1.0"
+  }
+}

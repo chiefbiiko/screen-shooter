@@ -1,0 +1,30 @@
+{
+  "name": "stampic",
+  "version": "0.0.0",
+  "description": "timestamp pictures",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiefbiiko/stampic.git"
+  },
+  "keywords": [
+    "timestamp",
+    "picture"
+  ],
+  "author": "Noah Anabiik Schwarz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chiefbiiko/stampic/issues"
+  },
+  "homepage": "https://github.com/chiefbiiko/stampic#readme",
+  "devDependencies": {
+    "tape": "^4.9.0"
+  },
+  "dependencies": {
+    "aka-opts": "0.0.3",
+    "jimp": "^0.2.28"
+  }
+}
