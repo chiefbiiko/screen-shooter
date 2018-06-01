@@ -9,7 +9,7 @@ const adsUrls = require('./ads-urls')
 const load = require('./stampic')
 const debug = require('debug')('auto-buster')
 
-const loify = keyword => keyword.replace(/[\s]+/g, '_')
+const space2lodash = keyword => keyword.trim().replace(/[\s]+/g, '_')
 
 ;(async () => {
 
@@ -18,16 +18,19 @@ const loify = keyword => keyword.replace(/[\s]+/g, '_')
   var N_MINED
   var N_PASS
   var N_FAIL
+  var N_ERR
 
-  const update = () => { // KEYWORD, N_MINED, N_PASS, N_FAIL, BUSY
+  const update = () => {
     diff.write(`
       Enter a keyword as input to ads-urls: ${dash.line()}
 
       Keyword: ${KEYWORD || 'none'}
       --------
-      Number of mined urls: ${N_MINED || 0}
-      Number of passing homepages: ${N_PASS || 0}
-      Number of failing homepages: ${N_FAIL || 0}
+      # mined urls: ${N_MINED || 0}
+      # passing homepages: ${N_PASS || 0}
+      # failing homepages: ${N_FAIL || 0}
+      # errors encountered: ${N_ERR || 0}
+      --------
 
       Status: ${STATUS || 'idle'}
     `)
@@ -44,21 +47,22 @@ const loify = keyword => keyword.replace(/[\s]+/g, '_')
     const keyword = line.trim()
     if (!keyword) return
 
-    N_PASS = 0
-    N_FAIL = 0
+    N_PASS = N_FAIL = 0
     STATUS = 'busy'
     KEYWORD = keyword
     update()
 
-    const urlMap = await adsUrls([ keyword ], { 
-      onlyHosts: true,
-      uniquify: true
-    })
+    const adsopts = { onlyHosts: true, uniquify: true }
+    var urlMap
+    try {
+      urlMap = await adsUrls([ keyword ], adsopts)
+    } catch (err) {
+      N_ERR++
+      update()
+    }
 
     N_MINED = urlMap[keyword].length
     update()
-
-    const dir = loify(keyword)
 
     shooter.on('pageinfo', async pageinfo => {
       pageinfo.passing ? N_PASS++ : N_FAIL++
@@ -66,14 +70,13 @@ const loify = keyword => keyword.replace(/[\s]+/g, '_')
       if (!pageinfo.passing) await stampic(pageinfo.filepath)
     })
 
-    shooter.on('metainfo', async metainfo => {
-      await writeFile(join(dir, 'info.json'), JSON.stringify(metainfo))
-    })
-
+    const checkopts = { dir: join('./screenshots', space2lodash(keyword)) }
+    var metainfo
     try {
-      await shooter.check(urlMap[keyword], dir, predicate)
+      metainfo = await shooter.check(urlMap[keyword], checkopts, predicate)
+      await writeFile(join(dir, 'info.json'), JSON.stringify(metainfo))
     } catch (err) {
-      STATUS = 'errored'
+      N_ERR++
       update()
     }
 

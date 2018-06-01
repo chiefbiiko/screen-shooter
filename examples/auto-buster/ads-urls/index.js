@@ -1,15 +1,22 @@
-const { each } = require('async')
 const { launch } = require('puppeteer')
 const { parse } = require('url')
 const dealias = require('aka-opts')
 const debug = require('debug')('ads-urls')
 
-const AKA_CONF = { onlyHosts: [ 'onlyHost' ], uniquify: [ 'uniq', 'unique' ] }
-const NAV_CONF = { waitUntil: 'networkidle0', timeout: 1000 }
+const AKA_CONF = {
+  onlyHosts: [ 'onlyHost', 'host', 'hosts' ],
+  uniquify: [ 'uniq', 'unique' ],
+  swallowErrors: [ 'swallow' ]
+}
+// const NAV_CONF = { waitUntil: 'networkidle0', timeout: 1000 }
 
 async function adsurls (keywords, opts) {
   opts = dealias(opts || {}, AKA_CONF)
-  opts = Object.assign({ onlyHosts: false, uniquify: false }, opts)
+  opts = Object.assign({
+    onlyHosts: false,
+    uniquify: false,
+    swallowErrors: false
+  }, opts)
 
   const browser = await launch()
   const urlMap = {}
@@ -56,13 +63,14 @@ async function adsurls (keywords, opts) {
     return links
   }
 
-  // async iteration promise
-  return new Promise((resolve, reject) => {
-    each(keywords, scan.bind(null, browser), async err => {
-      await browser.close()
-      err ? reject(err) : resolve(urlMap)
-    })
-  })
+  await Promise.all(
+    keywords.map(scan.bind(null, browser))
+      .map(p => p.catch(opts.swallowErrors ? err => {} : err => err))
+  )
+  await browser.close()
+
+  debug('urlMap::', urlMap)
+  return urlMap
 }
 
 module.exports = adsurls
